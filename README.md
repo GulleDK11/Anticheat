@@ -74,10 +74,19 @@ GD_EYE is a modular Roblox anti-cheat system built around server authority, secu
 - AntiHook:
   - `__namecall`, `__index`, `__newindex` integrity checks,
   - metatable poisoning probes.
+- Metamethod matrix:
+  - rotating consistency checks across `game`/`workspace` metatables,
+  - multi-probe invalid access/namecall paths to catch spoofed metamethod behavior.
 - AntiDebug:
   - timing stall detection,
   - heartbeat attestation drift,
   - thread suspend indicators.
+- Scheduler health:
+  - loop-gap and drift detection to catch selective coroutine throttling/freezing.
+- Runtime attestation:
+  - lightweight rotating runtime challenges to verify expected error/behavior paths.
+- Decoy paths:
+  - hidden decoy token + code paths that should never be externally modified.
 - EnvironmentScan:
   - executor global scans (`getgc`, `hookfunction`, `hookmetamethod`, etc.),
   - executor/anti-ban signatures (`potassium`, `rflhub`, `antikick`, etc.),
@@ -93,6 +102,9 @@ GD_EYE is a modular Roblox anti-cheat system built around server authority, secu
   - periodic module existence checks,
   - emits `Tamper_0x99_*` on module deletion/tamper,
   - stall pulse guard emits `Tamper_0x9A_watchdog_stall` on scanner freeze/suspend.
+- Client signal quorum:
+  - correlates multiple client signal families inside a short window,
+  - emits `client_quorum_multisignal` for high-confidence server correlation.
 
 ## Server Detection Engine
 
