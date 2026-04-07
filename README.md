@@ -109,6 +109,11 @@ GD_EYE is a modular Roblox anti-cheat system built around server authority, secu
   - anomalies in root part, assembly, and humanoid state.
 - Replication abuse checks.
 - Tool abuse checks.
+- Global server physics engine:
+  - server-authoritative simulation for tracked dynamic parts (not football-only),
+  - gravity, drag, restitution, friction, and angular damping,
+  - anti-tamper mismatch checks (step spikes, velocity/spin hard caps, prediction mismatch),
+  - material-specific behavior via `PhysicsEngine.MaterialFriction` and `PhysicsEngine.MaterialRestitution`.
 - Optional football checks:
   - active only when `Config.Game.Football = true`
   - and `Config.Features.FootballLegacyChecks = true`.
@@ -120,6 +125,19 @@ GD_EYE is a modular Roblox anti-cheat system built around server authority, secu
   - noclip ray helper,
   - recalculation/clamping of sensitive values,
   - action-specific payload validators (`SHOOT_REQUEST`, `BUY_REQUEST`, `TELEPORT_INTENT`, `REWARD_CLAIM`).
+
+## Knuckle Shot Support
+
+- `SHOOT_REQUEST` can be consumed server-side by the physics engine.
+- Use payload fields:
+  - `power` (number)
+  - `targetId` (string, kept for compatibility with existing validators)
+  - optional `shotType = "knuckle"`
+  - optional `lift` (number, small vertical component)
+- When `shotType` is `knuckle`, the engine applies:
+  - low-spin release,
+  - short lateral oscillation window,
+  - server-authoritative velocity updates.
 
 ## Offender Memory and Signature Store
 
