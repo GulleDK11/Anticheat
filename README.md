@@ -44,6 +44,7 @@ GD_EYE is a modular Roblox anti-cheat system built around server authority, secu
 - Strict rate limiting:
   - per-second window,
   - 5-second burst limit.
+  - user state is cleared on leave to avoid stale limiter/handshake state carryover.
 - Remote hygiene tiering:
   - critical actions can use stricter per-second caps,
   - optional mode to require signed envelopes only for critical traffic.
@@ -156,6 +157,8 @@ GD_EYE is a modular Roblox anti-cheat system built around server authority, secu
 - `SignatureStore` stores:
   - learned signatures,
   - offender history by `UserId`.
+- Signature persistence uses atomic `UpdateAsync` patterns to reduce race conditions.
+- Offender history is stored per-user key for safer high-concurrency writes.
 - Repeat offenders can receive score boosts on join.
 - Repeated low-level flags can accumulate suspicion over time.
 
@@ -179,6 +182,7 @@ GD_EYE is a modular Roblox anti-cheat system built around server authority, secu
 - Discord webhook support with separate channels:
   - flags, stats, bans, kicks, warnings, ban waves.
 - Event embeds include player, reason, score, and action.
+- Webhook fields are sanitized to reduce mention abuse and payload spam risk.
 - `LogOnlyMode` can be used for safe calibration/testing.
 
 ## Admin Commands (Ban Wave)
